@@ -9,12 +9,12 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='fh-django-common',
-    version='0.2.2',
+    version='0.2.3',
     packages=['common'],
     include_package_data=True,
     description='A Django app to provide common functionality in Django projects',
     long_description=README,
-    url='https://github.com/thefuturehaus/django-common',
+    url='https://gitlab.com/futurehaus/django-common',
     tests_require=['Django'],
     test_suite='runtests.main',
 )

@@ -11,3 +11,15 @@ HTTP_400 = {
 HTTP_404 = {
     'type': 'object'
 }
+
+HTTP_200_LIST = {
+    'type': 'object',
+    'required': ['next', 'previous', 'count', 'results'],
+    'properties': {
+        'next': {'type': ['string', 'null']},
+        'previous': {'type': ['string', 'null']},
+        'count': {'type': 'number'},
+        'results': {'type': 'array'},
+    },
+    'additionalProperties': False
+}
