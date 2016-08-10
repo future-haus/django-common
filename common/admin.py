@@ -4,7 +4,7 @@ class NotDeletableAdminMixin(object):
 
     def get_actions(self, request):
         actions = super(NotDeletableAdminMixin, self).get_actions(request)
-        del actions['delete_selected']
+        actions.pop('delete_selected', None)
         return actions
 
     def has_delete_permission(self, request, obj=None):
