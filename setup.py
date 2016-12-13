@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='fh-django-common',
-    version='0.2.9',
+    version='0.2.10',
     packages=['common'],
     include_package_data=True,
     description='A Django app to provide common functionality in Django projects',
