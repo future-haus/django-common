@@ -50,5 +50,5 @@ def mptt_build_tree(queryset, children_key):
 
 class MPTTDescendantsTreeMixin(object):
 
-    def get_descendants_as_tree(self, children_key='children'):
-        return mptt_build_tree(self.get_descendants(include_self=True), children_key=children_key)[0]
+    def get_descendants_as_tree(self, children_key='children', **filters):
+        return mptt_build_tree(self.get_descendants(include_self=True).filter(**filters), children_key=children_key)[0]
