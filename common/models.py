@@ -1,5 +1,8 @@
 from collections import OrderedDict
+from hashids import Hashids
+import hashlib
 
+from django.conf import settings
 from django.db import models
 from django.db.models import QuerySet
 
@@ -7,6 +10,48 @@ from django.db.models import QuerySet
 class DateTimeModelMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated')
+
+    class Meta:
+        abstract = True
+
+
+# Add a computed property to model that generates a hashid
+# that can be used to show unguessable IDs instead
+# of the actual ID
+class UIDManager(models.Manager):
+
+    def get_by_uid(self, uid):
+        id_ = self.model.hashids().decode(uid)
+        obj = None
+        if len(id_) > 0:
+            try:
+                obj = self.get(pk=id_[0])
+            except models.ObjectDoesNotExist:
+                pass
+
+        return obj
+
+
+class UIDMixin(models.Model):
+
+    objects = UIDManager()
+
+    _hashids = None
+
+    def __init__(self, *args, **kwargs):
+        super(UIDMixin, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def hashids(cls):
+        if not cls._hashids:
+            md5 = hashlib.md5()
+            md5.update('{}{}'.format(settings.SECRET_KEY, cls.__name__))
+            cls._hashids = Hashids(salt=md5.hexdigest(), min_length=16)
+        return cls._hashids
+
+    @property
+    def uid(self):
+        return self.hashids().encode(self.pk)
 
     class Meta:
         abstract = True
